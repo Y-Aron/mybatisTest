@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <!--
+        加载配置文件
+        1. 在properties元素体内定义的属性首先被读取
+        2. 然后会读取properties元素中resource或url加载的属性，它会覆盖已读取的同名属性
+    -->
+    <properties resource="jdbc.properties">
+        <!-- properties元素体内定义属性 -->
+        <property name="jdbc.password" value="123456"/>
+    </properties>
+
+    <!--
+        类型别名
+        同时定义<typeAlias type="org.aron.mybatisTest.domain.pojo.User" alias="User1"/>和
+        <package name="org.aron.mybatisTest.domain.pojo"/> 时,别名以 typeAlias为准
+    -->
+    <typeAliases>
+        <!-- 单个别名定义 -->
+        <typeAlias type="org.aron.mybatisTest.domain.pojo.User" alias="User1" />
+        <!-- 批量别名定义, 扫描整个包下的类, 别名为类名(大小写不敏感), 可定义多个package -->
+        <package name="org.aron.mybatisTest.domain.pojo"/>
+    </typeAliases>
+
+    <environments default="development">
+        <environment id="development">
+            <!-- 使用jdbc事务管理，事务控制由mybatis -->
+            <transactionManager type="JDBC"/>
+            <!-- 使用Mybatis自带的连接池 -->
+            <dataSource type="POOLED">
+                <!-- 使用${}获取配置文件的参数 -->
+                <property name="driver" value="${jdbc.driver}"/>
+                <property name="url" value="${jdbc.url}"/>
+                <property name="username" value="${jdbc.username}"/>
+                <property name="password" value="${jdbc.password}"/>
+            </dataSource>
+            <!-- 整合HikariCP连接池 -->
+<!--            <dataSource type="org.aron.mybatisTest.datasource.HikariCPDataSourceFactory">-->
+<!--                &lt;!&ndash; 使用${}获取配置文件的参数 &ndash;&gt;-->
+<!--                <property name="driver" value="${jdbc.driver}"/>-->
+<!--                <property name="url" value="${jdbc.url}"/>-->
+<!--                <property name="username" value="${jdbc.username}"/>-->
+<!--                <property name="password" value="${jdbc.password}"/>-->
+<!--            </dataSource>-->
+        </environment>
+    </environments>
+
+    <!-- 加载映射文件 -->
+    <mappers>
+<!--        <mapper resource="mapper/UserMapper.xml"/>-->
+        <!--
+            通过mapper接口加载单个映射文件时,需要遵循以下规范
+            1. mapper接口类名和mapper.xml映射文件名称保持一致
+            2. 接口与*.xml放在同一目录下
+        -->
+<!--        <mapper class="org.aron.mybatisTest.domain.dao.UserMapper" />-->
+
+        <!-- 批量加载mapper -->
+        <package name="org.aron.mybatisTest.domain.dao"/>
+
+    </mappers>
+</configuration>
